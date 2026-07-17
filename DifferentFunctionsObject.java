@@ -35,21 +35,14 @@ public class DifferentFunctionsObject extends HttpServlet {
 
 	private void goToSQL(String param) {
 
-		try {
+		TaintObj obj = new TaintObj(param);
 
-			TaintObj obj = new TaintObj();
-			obj.setParam1(param);
-			
-			Connection conn = DriverManager.getConnection("jdbc:mysql://local/", "userName", "password");
-
-			Statement st = conn.createStatement();
-
-			ResultSet res = st.executeQuery("SELECT * FROM  User where userId='" + obj.getParam1() + "'");
-
-			res.close();
-			
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://local/", "userName", "password");
+			 Statement st = conn.createStatement();
+			 ResultSet res = st.executeQuery("SELECT * FROM User where userId='" + obj.getParam1() + "'")) {
+			// result processing would go here
 		} catch (Exception e) {
-			// TODO do nothing
+			// do nothing
 		}
 
 	}
@@ -59,23 +52,15 @@ public class DifferentFunctionsObject extends HttpServlet {
 
 
 
-class TaintObj{
-	
-	private String param1;
-	
-	public TaintObj(){
-		
+class TaintObj {
+
+	private final String param1;
+
+	public TaintObj(String param1) {
+		this.param1 = param1;
 	}
 
 	public String getParam1() {
 		return param1;
 	}
-
-	public void setParam1(String param1) {
-		this.param1 = param1;
-	}
-
-	
-	
-	
 }
