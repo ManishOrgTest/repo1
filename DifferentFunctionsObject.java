@@ -38,9 +38,9 @@ public class DifferentFunctionsObject extends HttpServlet {
 		TaintObj obj = new TaintObj(param);
 
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://local/", "userName", "password");
-			 Statement st = conn.createStatement();
-			 ResultSet res = st.executeQuery("SELECT * FROM User where userId='" + obj.getParam1() + "'")) {
-			// result processing would go here
+			 Statement st = conn.createStatement()) {
+			ResultSet res = st.executeQuery("SELECT * FROM User where userId='" + obj.getParam1() + "'");
+			res.close();
 		} catch (Exception e) {
 			// do nothing
 		}
